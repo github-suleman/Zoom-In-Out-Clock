@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Digital Clock</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+.clock {
+      font-size: 64px;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      border: 1px solid orange;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.5s; /* add transition effect */
+    }
+
+.clock.grow {
+      transform: scale(5); /* scale up to 1.2 times original size */
+    }
+
+.clock.shrink {
+      transform: scale(1); /* scale back to original size */
+    }
+  </style>
+</head>
+<body>
+  <div class="clock" id="clock"></div>
+
+  <script>
+    let grow = true;
+
+    function updateClock() {
+      const pakistanTime = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
+      let hours = pakistanTime.getHours();
+      let ampm = hours >= 12? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours? hours : 12; // the hour '0' should be '12'
+      const minutes = pakistanTime.getMinutes().toString().padStart(2, '0');
+      const seconds = pakistanTime.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    function animateClock() {
+      const clock = document.getElementById('clock');
+      if (grow) {
+        clock.classList.add('grow');
+        clock.classList.remove('shrink');
+      } else {
+        clock.classList.add('shrink');
+        clock.classList.remove('grow');
+      }
+      grow =!grow;
+    }
+
+    setInterval(updateClock, 1000);
+    setInterval(animateClock, 5000); // animate every 5 seconds
+    updateClock();
+  </script>
+
+<script>
+     let grow = true;
+     let currentTime = localStorage.getItem('currentTime');
+   
+     if (!currentTime) {
+       currentTime = new Date();
+       localStorage.setItem('currentTime', currentTime.getTime());
+     }
+   
+     function updateClock() {
+       const pakistanTime = new Date(currentTime);
+       const hours = pakistanTime.getHours().toString().padStart(2, '0');
+       const minutes = pakistanTime.getMinutes().toString().padStart(2, '0');
+       const seconds = pakistanTime.getSeconds().toString().padStart(2, '0');
+       document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+       currentTime = pakistanTime.getTime();
+       localStorage.setItem('currentTime', currentTime);
+     }
+   
+     function animateClock() {
+       const clock = document.getElementById('clock');
+       if (grow) {
+         clock.classList.add('grow');
+         clock.classList.remove('shrink');
+       } else {
+         clock.classList.add('shrink');
+         clock.classList.remove('grow');
+       }
+       grow =!grow;
+     }
+   
+     setInterval(updateClock, 1000);
+     setInterval(animateClock, 5000); // animate every 5 seconds
+     updateClock();
+   </script>
+</body>
+</html>
