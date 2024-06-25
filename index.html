@@ -13,24 +13,78 @@
       height: 100vh;
     }
 
-.clock {
+    .clock {
       font-size: 64px;
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
       padding: 20px;
       border: 1px solid orange;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       transition: transform 0.5s; /* add transition effect */
+      position: relative; /* add relative positioning */
     }
 
-.clock.grow {
+    .clock::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(to right, #01fee6, #00ff7c);
+      border-radius: 20px;
+      animation: shine 5s infinite; /* add animation */
+      z-index: -1; /* send the shining line to the back */
+    }
+
+    @keyframes shine {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+
+    .clock.grow {
       transform: scale(5); /* scale up to 1.2 times original size */
     }
 
-.clock.shrink {
+    .clock.shrink {
       transform: scale(1); /* scale back to original size */
+    }
+
+    /* Media queries for responsiveness */
+    @media only screen and (max-width: 1920px) { /* for 2K resolution */
+      .clock {
+        font-size: 48px;
+      }
+    }
+
+    @media only screen and (max-width: 1366px) { /* for Full HD resolution */
+      .clock {
+        font-size: 36px;
+      }
+    }
+
+    @media only screen and (max-width: 1024px) { /* for HD resolution */
+      .clock {
+        font-size: 28px;
+      }
+    }
+
+    @media only screen and (max-width: 768px) { /* for tablet resolution */
+      .clock {
+        font-size: 24px;
+      }
+    }
+
+    @media only screen and (max-width: 480px) { /* for mobile resolution */
+      .clock {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
@@ -67,41 +121,5 @@
     setInterval(animateClock, 5000); // animate every 5 seconds
     updateClock();
   </script>
-
-<script>
-     let grow = true;
-     let currentTime = localStorage.getItem('currentTime');
-   
-     if (!currentTime) {
-       currentTime = new Date();
-       localStorage.setItem('currentTime', currentTime.getTime());
-     }
-   
-     function updateClock() {
-       const pakistanTime = new Date(currentTime);
-       const hours = pakistanTime.getHours().toString().padStart(2, '0');
-       const minutes = pakistanTime.getMinutes().toString().padStart(2, '0');
-       const seconds = pakistanTime.getSeconds().toString().padStart(2, '0');
-       document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-       currentTime = pakistanTime.getTime();
-       localStorage.setItem('currentTime', currentTime);
-     }
-   
-     function animateClock() {
-       const clock = document.getElementById('clock');
-       if (grow) {
-         clock.classList.add('grow');
-         clock.classList.remove('shrink');
-       } else {
-         clock.classList.add('shrink');
-         clock.classList.remove('grow');
-       }
-       grow =!grow;
-     }
-   
-     setInterval(updateClock, 1000);
-     setInterval(animateClock, 5000); // animate every 5 seconds
-     updateClock();
-   </script>
 </body>
 </html>
